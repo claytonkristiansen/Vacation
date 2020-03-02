@@ -14,8 +14,8 @@ void PrintArray(T* arr, int length, std::ostream &stream)
 
 int main()
 {
-    int *prefs = new int[MAX_NB_GAMES];
-    int *plan = new int[366];
+    int prefs[MAX_NB_GAMES];
+    int plan[366];
     std::string* titles = new std::string[MAX_NB_GAMES];
     std::cout << "Please enter the number of games and the duration: ";
     int numGames = 0;
@@ -27,15 +27,15 @@ int main()
         // delete[] prefs;
         // delete[] plan;
         // delete[] titles;
-        return 0;
+        return 1;
     }
-    if(duration < 0)
+    if(duration < 1 || duration > 365)
     {
         std::cout << "Invalid input.\n";
         // delete[] prefs;
         // delete[] plan;
         // delete[] titles;
-        return 0;
+        return 1;
     }
     
     std::cout << "Please enter name of file with titles: ";
@@ -54,7 +54,7 @@ int main()
         readPrefs(prefFile, numGames, prefs);
         //PrintArray<int>(prefs, numGames, std::cout);
         readPlan(planFile, plan);
-        //PrintArray<int>(plan, 365, std::cout);
+        //PrintArray<int>(plan, 366, std::cout);
         date = findBestVacation(duration, prefs, plan);
         std::cout << "Best start day is " << date << std::endl << "Games to be played:\n";
         
@@ -62,6 +62,11 @@ int main()
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
+        delete[] titles;
+        delete[] titlesFile;
+        delete[] prefFile;
+        delete[] planFile;
+        return 1;
         // delete[] prefs;
         // delete[] plan;
         // delete[] titles;
@@ -69,8 +74,8 @@ int main()
         // delete[] prefFile;
         // delete[] planFile;
     }
+    //prefs[98] = 5;
     printGamesPlayedInVacation(date, duration, plan, titles, numGames); 
-    
     
     
     
@@ -80,10 +85,9 @@ int main()
     // }
     //std::cout << "\n\n" << prefs[98];
 
-    //std::cout << prefs[98];
+    // std::cout << prefs[98];
 
-    delete[] prefs;
-    delete[] plan;
+
     delete[] titles;
     delete[] titlesFile;
     delete[] prefFile;
@@ -92,4 +96,4 @@ int main()
 
 
     return 0;
-}   
+}       

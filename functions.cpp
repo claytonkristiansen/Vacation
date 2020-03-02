@@ -51,13 +51,9 @@ void StreamEntrySkip(std::ifstream& stream, int numEntries)
 
 int findBestVacation(int duration, int prefs[], int plan[])
 {
-    if(duration < 1)
-    {
-        return 0;
-    }
     int mostFun = 0;
     int startDate = 0;
-    if(duration > 365)
+    if(duration > 365 || duration < 1)
     {
         throw(std::invalid_argument(""));
     }
@@ -66,7 +62,7 @@ int findBestVacation(int duration, int prefs[], int plan[])
         int val = computeFunLevel(i, duration, prefs, plan);
         if(val > mostFun)
         {
-            mostFun = val;
+            mostFun = val;  
             startDate = i;
         }
     }
@@ -136,44 +132,35 @@ void readPlan(std::string fileName, int plan[])
 
 void readPrefs(std::string fileName, int ngames, int prefs[])
 {
-    // try
-    // {    
-        ifstream inFile(fileName);
-        if(inFile.is_open())
+    ifstream inFile(fileName);
+    if(!inFile.is_open()) 
+    {
+        throw(runtime_error("Invalid preference file."));
+    }
+
+    for(int i = 0; i < ngames; i++) 
+    {
+        prefs[i] = 0;
+    }
+
+    int index = 0;
+    int rating = 0;
+    while(!inFile.eof())
+    {
+        inFile >> index;
+        inFile >> rating;
+        if(inFile.fail())
         {
-            // cout << "Opening file " << fileName << "...\n";
+            std::string garbagio = "";
+            std::getline(inFile, garbagio);
         }
-        else
+        else if(index >= 0 && index < ngames)
         {
-            throw(runtime_error("Invalid preference file."));
-        }
-        for(int i = 0; i < ngames; i++)
-        {
-            prefs[i] = 0;
-        }
-        for(int i = 0; i < ngames && !inFile.eof(); ++i)
-        {
-            int index = 0;
-            inFile >> index;
-            if(inFile.fail())
+            if(rating > 0 && rating <= 5)
             {
-                StreamEntrySkip(inFile, 2);
-            }
-            else if(index > 0 && index <= ngames)
-            {
-                inFile >> prefs[index];
-                if(inFile.fail())
-                {
-                    StreamEntrySkip(inFile, 1);
-                }
+                prefs[index] = rating;
             }
         }
-        //PrintArray<int>(prefs, ngames, cout);
-    // }
-    // catch(runtime_error &e)
-    // {
-    //     cout << "Failed to open file " << fileName << "\n";
-    //     return;
-    // }
+    }
 }
 
