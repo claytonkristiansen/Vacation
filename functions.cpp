@@ -17,6 +17,10 @@ using std::runtime_error;
 //Skips the specified number of entries. Entries are determined by the const DELIMITERS array set in funcitons.h
 void StreamEntrySkip(std::ifstream& stream, int numEntries)
 {
+    if(stream.eof())
+    {
+        return;
+    }
     const char DELIMITERS[] = "\n ,";
     stream >> std::noskipws;
     stream.clear();
@@ -49,11 +53,15 @@ int findBestVacation(int duration, int prefs[], int plan[])
 {
     if(duration < 1)
     {
-        return -1;
+        return 0;
     }
     int mostFun = 0;
     int startDate = 0;
-    for(int i = 1; i < 365 - duration + 1; ++i)
+    if(duration > 365)
+    {
+        throw(std::invalid_argument(""));
+    }
+    for(int i = 1; i <= 365 - duration + 1; ++i)
     {
         int val = computeFunLevel(i, duration, prefs, plan);
         if(val > mostFun)
@@ -133,7 +141,7 @@ void readPrefs(std::string fileName, int ngames, int prefs[])
         ifstream inFile(fileName);
         if(inFile.is_open())
         {
-            cout << "Opening file " << fileName << "...\n";
+            // cout << "Opening file " << fileName << "...\n";
         }
         else
         {
@@ -153,7 +161,7 @@ void readPrefs(std::string fileName, int ngames, int prefs[])
             }
             else if(index > 0 && index <= ngames)
             {
-                inFile >> prefs[index - 1];
+                inFile >> prefs[index];
                 if(inFile.fail())
                 {
                     StreamEntrySkip(inFile, 1);

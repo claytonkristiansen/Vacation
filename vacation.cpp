@@ -3,6 +3,15 @@
 #include "functions.h"
 #include "provided.h"
 
+template<typename T>
+void PrintArray(T* arr, int length, std::ostream &stream)
+{
+    for(int i = 0; i < length; ++i)
+    {
+        stream << i << ": " << arr[i] << std::endl;
+    }
+}
+
 int main()
 {
     int *prefs = new int[MAX_NB_GAMES];
@@ -14,43 +23,64 @@ int main()
     std::cin >> numGames >> duration;
     if(numGames > MAX_NB_GAMES)
     {
-        std::cout << "Invalid Input";
-        delete[] prefs;
-        delete[] plan;
-        delete[] titles;
+        std::cout << "Invalid input.\n";
+        // delete[] prefs;
+        // delete[] plan;
+        // delete[] titles;
+        return 0;
+    }
+    if(duration < 0)
+    {
+        std::cout << "Invalid input.\n";
+        // delete[] prefs;
+        // delete[] plan;
+        // delete[] titles;
         return 0;
     }
     
-    std::cout << "\nPlease enter name of file with titles: ";
+    std::cout << "Please enter name of file with titles: ";
     char* titlesFile = new char[256];
     std::cin >> titlesFile;
-    std::cout << "\nPlease enter name of file with preferences: ";
+    std::cout << "Please enter name of file with preferences: ";
     char* prefFile = new char[256];
     std::cin >> prefFile;
-    std::cout << "\nPlease enter name of file with plan: ";
+    std::cout << "Please enter name of file with plan: ";
     char* planFile = new char[256];
     std::cin >> planFile;
+    int date = 0;
     try
     {
-        readPrefs(prefFile, 100, prefs);
-        readPlan(planFile, plan);
         readGameTitles(titlesFile, numGames, titles);
-    
-        int date = findBestVacation(7, prefs, plan);
-
-        std::cout << "Best start day is " << date << std::endl << "Games to be played:";
-        printGamesPlayedInVacation(date, duration, plan, titles, numGames);
+        readPrefs(prefFile, numGames, prefs);
+        //PrintArray<int>(prefs, numGames, std::cout);
+        readPlan(planFile, plan);
+        //PrintArray<int>(plan, 365, std::cout);
+        date = findBestVacation(duration, prefs, plan);
+        std::cout << "Best start day is " << date << std::endl << "Games to be played:\n";
+        
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
+        // delete[] prefs;
+        // delete[] plan;
+        // delete[] titles;
+        // delete[] titlesFile;
+        // delete[] prefFile;
+        // delete[] planFile;
     }
+    printGamesPlayedInVacation(date, duration, plan, titles, numGames); 
+    
+    
     
     
     // for(int i = date; i < date + duration; ++i)
     // {
     //     std::cout << std::endl << titles[plan[i]];
     // }
+    //std::cout << "\n\n" << prefs[98];
+
+    //std::cout << prefs[98];
 
     delete[] prefs;
     delete[] plan;

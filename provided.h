@@ -30,3 +30,6 @@ void printGamesPlayedInVacation(
     int plan[],
     std::string gameTitles[],
     int ngames);
+
+// template<typename T>
+// void PrintArray(T* arr, int length, std::ostream& stream);

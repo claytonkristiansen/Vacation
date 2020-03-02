@@ -12,8 +12,7 @@
 void StreamEntrySkip(std::ifstream& stream, int numEntries, char delimiters[], int numDelim);
 
 
-template<typename T>
-void PrintArray(T* arr, int length, std::ostream& stream);
+
 
 
 /*  Function findBestVacation

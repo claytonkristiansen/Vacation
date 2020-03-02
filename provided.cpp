@@ -60,11 +60,11 @@ void printGamesPlayedInVacation(int start, int duration, int plan[],
     }
 }
 
-template<typename T>
-void PrintArray(T* arr, int length, std::ostream &stream)
-{
-    for(int i = 0; i < length; ++i)
-    {
-        stream << i << ": " << arr[i] << endl;
-    }
-}
+// template<typename T>
+// void PrintArray(T* arr, int length, std::ostream &stream)
+// {
+//     for(int i = 0; i < length; ++i)
+//     {
+//         stream << i << ": " << arr[i] << endl;
+//     }
+// }
